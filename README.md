@@ -150,7 +150,7 @@ MCP for Unity connects your tools using two components:
 
 **Need a fixed version?** Use a tagged URL instead (updates require uninstalling and re-installing):
 ```
-https://github.com/prophecygamestudio/unity-mcp.git?path=/MCPForUnity#v8.1.6.2
+https://github.com/prophecygamestudio/unity-mcp.git?path=/MCPForUnity#v8.1.7
 ```
 
 #### To install via OpenUPM
@@ -177,7 +177,7 @@ HTTP transport is enabled out of the box. The Unity window can launch the FastMC
 You can also start the server yourself from a terminal—useful for CI or when you want to see raw logs:
 
 ```bash
-uvx --from "git+https://github.com/prophecygamestudio/unity-mcp@v8.1.0#subdirectory=Server" mcp-for-unity --transport http --http-url http://localhost:8080
+uvx --from "git+https://github.com/prophecygamestudio/unity-mcp@v8.1.7#subdirectory=Server" mcp-for-unity --transport http --http-url http://localhost:8080
 ```
 
 Keep the process running while clients are connected.
