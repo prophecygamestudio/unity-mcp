@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MCPForUnity.Editor.Helpers;
 using MCPForUnity.Editor.Services;
 using MCPForUnity.Editor.Windows.Components.ClientConfig;
-using MCPForUnity.Editor.Windows.Components.Connection;
 using MCPForUnity.Editor.Windows.Components.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -16,8 +15,6 @@ namespace MCPForUnity.Editor.Windows
     {
         // Section controllers
         private McpSettingsSection settingsSection;
-        private McpConnectionSection connectionSection;
-        private McpClientConfigSection clientConfigSection;
 
         private static readonly HashSet<MCPForUnityEditorWindow> OpenWindows = new();
         private bool guiCreated = false;
@@ -115,34 +112,6 @@ namespace MCPForUnity.Editor.Windows
                 var settingsRoot = settingsTree.Instantiate();
                 sectionsContainer.Add(settingsRoot);
                 settingsSection = new McpSettingsSection(settingsRoot);
-                settingsSection.OnGitUrlChanged += () =>
-                    clientConfigSection?.UpdateManualConfiguration();
-                settingsSection.OnHttpServerCommandUpdateRequested += () =>
-                    connectionSection?.UpdateHttpServerCommandDisplay();
-            }
-
-            // Load and initialize Connection section
-            var connectionTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                $"{basePath}/Editor/Windows/Components/Connection/McpConnectionSection.uxml"
-            );
-            if (connectionTree != null)
-            {
-                var connectionRoot = connectionTree.Instantiate();
-                sectionsContainer.Add(connectionRoot);
-                connectionSection = new McpConnectionSection(connectionRoot);
-                connectionSection.OnManualConfigUpdateRequested += () =>
-                    clientConfigSection?.UpdateManualConfiguration();
-            }
-
-            // Load and initialize Client Configuration section
-            var clientConfigTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                $"{basePath}/Editor/Windows/Components/ClientConfig/McpClientConfigSection.uxml"
-            );
-            if (clientConfigTree != null)
-            {
-                var clientConfigRoot = clientConfigTree.Instantiate();
-                sectionsContainer.Add(clientConfigRoot);
-                clientConfigSection = new McpClientConfigSection(clientConfigRoot);
             }
 
             guiCreated = true;
@@ -177,8 +146,6 @@ namespace MCPForUnity.Editor.Windows
         {
             if (rootVisualElement == null || rootVisualElement.childCount == 0)
                 return;
-
-            connectionSection?.UpdateConnectionStatus();
         }
 
         private void RefreshAllData()
@@ -190,46 +157,6 @@ namespace MCPForUnity.Editor.Windows
                 return;
             }
             lastRefreshTime = currentTime;
-
-            connectionSection?.UpdateConnectionStatus();
-
-            if (MCPServiceLocator.Bridge.IsRunning)
-            {
-                _ = connectionSection?.VerifyBridgeConnectionAsync();
-            }
-
-            settingsSection?.UpdatePathOverrides();
-            clientConfigSection?.RefreshSelectedClient();
-        }
-
-        internal static void RequestHealthVerification()
-        {
-            foreach (var window in OpenWindows)
-            {
-                window?.ScheduleHealthCheck();
-            }
-        }
-
-        private void ScheduleHealthCheck()
-        {
-            EditorApplication.delayCall += async () =>
-            {
-                // Ensure window and components are still valid before execution
-                if (this == null || connectionSection == null)
-                {
-                    return;
-                }
-
-                try
-                {
-                    await connectionSection.VerifyBridgeConnectionAsync();
-                }
-                catch (Exception ex)
-                {
-                    // Log but don't crash if verification fails during cleanup
-                    McpLog.Warn($"Health check verification failed: {ex.Message}");
-                }
-            };
         }
     }
 }
