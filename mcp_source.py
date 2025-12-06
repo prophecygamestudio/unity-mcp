@@ -20,7 +20,7 @@ import pathlib
 import subprocess
 import sys
 
-PKG_NAME = "com.coplaydev.unity-mcp"
+PKG_NAME = "com.prophecygamestudio.unity-mcp"
 BRIDGE_SUBPATH = "MCPForUnity"
 
 
@@ -91,7 +91,7 @@ def write_json(path: pathlib.Path, data: dict) -> None:
 
 
 def build_options(repo_root: pathlib.Path, branch: str, origin_https: str):
-    upstream = "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity"
+    upstream = "https://github.com/prophecygamestudio/unity-mcp.git?path=/MCPForUnity"
     # Ensure origin is https
     origin = origin_https
     # If origin is a local file path or non-https, try to coerce to https github if possible
