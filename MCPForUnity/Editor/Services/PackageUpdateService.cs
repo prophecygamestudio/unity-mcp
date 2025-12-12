@@ -19,6 +19,15 @@ namespace MCPForUnity.Editor.Services
         /// <inheritdoc/>
         public UpdateCheckResult CheckForUpdate(string currentVersion)
         {
+            return new UpdateCheckResult
+            {
+                CheckSucceeded = true,
+                LatestVersion = null,
+                UpdateAvailable = false,
+                Message = "Disabling version update check."
+            };
+
+            /* Disabling update logic for now
             // Check cache first - only check once per day
             string lastCheckDate = EditorPrefs.GetString(LastCheckDateKey, "");
             string cachedLatestVersion = EditorPrefs.GetString(CachedVersionKey, "");
@@ -69,6 +78,7 @@ namespace MCPForUnity.Editor.Services
                 UpdateAvailable = false,
                 Message = "Failed to check for updates (network issue or offline)"
             };
+            */
         }
 
         /// <inheritdoc/>

@@ -6,7 +6,7 @@ namespace MCPForUnity.Editor.MenuItems
 {
     public static class MCPForUnityMenu
     {
-        [MenuItem("Window/MCP For Unity/Toggle MCP Window %#m", priority = 2)]
+        [MenuItem("Window/MCP For Unity/Settings %#m", priority = 2)]
         public static void ToggleMCPWindow()
         {
             if (MCPForUnityEditorWindow.HasAnyOpenWindow())
