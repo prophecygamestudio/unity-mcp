@@ -16,6 +16,7 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
         // UI Elements
         private Label versionLabel;
         private Toggle debugLogsToggle;
+        private Toggle stackTraceToggle;
 
         public VisualElement Root { get; private set; }
 
@@ -31,6 +32,7 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
         {
             versionLabel = Root.Q<Label>("version-label");
             debugLogsToggle = Root.Q<Toggle>("debug-logs-toggle");
+            stackTraceToggle = Root.Q<Toggle>("stack-trace-toggle");
         }
 
         private void InitializeUI()
@@ -46,6 +48,13 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
                 debugLogsToggle.value = debugEnabled;
                 McpLog.SetDebugLoggingEnabled(debugEnabled);
             }
+
+            if (stackTraceToggle != null)
+            {
+                bool stackTraceEnabled = EditorPrefs.GetBool(EditorPrefKeys.LogStackTrace, true);
+                stackTraceToggle.value = stackTraceEnabled;
+                McpLog.SetStackTraceEnabled(stackTraceEnabled);
+            }
         }
 
         private void RegisterCallbacks()
@@ -53,6 +62,11 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
             debugLogsToggle.RegisterValueChangedCallback(evt =>
             {
                 McpLog.SetDebugLoggingEnabled(evt.newValue);
+            });
+
+            stackTraceToggle.RegisterValueChangedCallback(evt =>
+            {
+                McpLog.SetStackTraceEnabled(evt.newValue);
             });
         }
 

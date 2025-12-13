@@ -12,12 +12,20 @@ namespace MCPForUnity.Editor.Helpers
         private const string ErrorPrefix = "<b><color=#cc3333>MCP-FOR-UNITY</color></b>:";
 
         private static volatile bool _debugEnabled = ReadDebugPreference();
+        private static volatile bool _stackTraceEnabled = ReadStackTracePreference();
 
         private static bool IsDebugEnabled() => _debugEnabled;
+        private static bool IsStackTraceEnabled() => _stackTraceEnabled;
 
         private static bool ReadDebugPreference()
         {
             try { return EditorPrefs.GetBool(EditorPrefKeys.DebugLogs, false); }
+            catch { return false; }
+        }
+
+        private static bool ReadStackTracePreference()
+        {
+            try { return EditorPrefs.GetBool(EditorPrefKeys.LogStackTrace, false); }
             catch { return false; }
         }
 
@@ -28,26 +36,37 @@ namespace MCPForUnity.Editor.Helpers
             catch { }
         }
 
+        public static void SetStackTraceEnabled(bool enabled)
+        {
+            _stackTraceEnabled = enabled;
+            try { EditorPrefs.SetBool(EditorPrefKeys.LogStackTrace, enabled); }
+            catch { }
+        }
+
         public static void Debug(string message)
         {
             if (!IsDebugEnabled()) return;
-            UnityEngine.Debug.Log($"{DebugPrefix} {message}");
+            LogOption logOption = IsStackTraceEnabled() ? LogOption.None : LogOption.NoStacktrace;
+            UnityEngine.Debug.LogFormat(LogType.Log, logOption, null, "{0} {1}", DebugPrefix, message);
         }
 
         public static void Info(string message, bool always = true)
         {
             if (!always && !IsDebugEnabled()) return;
-            UnityEngine.Debug.Log($"{InfoPrefix} {message}");
+            LogOption logOption = IsStackTraceEnabled() ? LogOption.None : LogOption.NoStacktrace;
+            UnityEngine.Debug.LogFormat(LogType.Log, logOption, null, "{0} {1}", InfoPrefix, message);
         }
 
         public static void Warn(string message)
         {
-            UnityEngine.Debug.LogWarning($"{WarnPrefix} {message}");
+            LogOption logOption = IsStackTraceEnabled() ? LogOption.None : LogOption.NoStacktrace;
+            UnityEngine.Debug.LogFormat(LogType.Warning, logOption, null, "{0} {1}", WarnPrefix, message);
         }
 
         public static void Error(string message)
         {
-            UnityEngine.Debug.LogError($"{ErrorPrefix} {message}");
+            LogOption logOption = IsStackTraceEnabled() ? LogOption.None : LogOption.NoStacktrace;
+            UnityEngine.Debug.LogFormat(LogType.Error, logOption, null, "{0} {1}", ErrorPrefix, message);
         }
     }
 }

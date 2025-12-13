@@ -8,6 +8,7 @@ namespace MCPForUnity.Editor.Constants
     {
         internal const string UseHttpTransport = "MCPForUnity.UseHttpTransport";
         internal const string DebugLogs = "MCPForUnity.DebugLogs";
+        internal const string LogStackTrace = "MCPForUnity.LogStackTrace";
         internal const string ValidationLevel = "MCPForUnity.ValidationLevel";
         internal const string UnitySocketPort = "MCPForUnity.UnitySocketPort";
         internal const string ResumeHttpAfterReload = "MCPForUnity.ResumeHttpAfterReload";

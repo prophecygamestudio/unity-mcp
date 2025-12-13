@@ -8,7 +8,11 @@
                 <ui:Label text="..." name="version-label" class="setting-value" />
             </ui:VisualElement>
             <ui:VisualElement class="setting-row">
-                <ui:Label text="Show Debug Logs:" class="setting-label" />
+                <ui:Label text="Log Full Stack Trace (disable if Editor locking up):" class="setting-label" />
+                <ui:Toggle name="stack-trace-toggle" class="setting-toggle" />
+            </ui:VisualElement>
+            <ui:VisualElement class="setting-row">
+                <ui:Label text="Show Debug-Level Logs:" class="setting-label" />
                 <ui:Toggle name="debug-logs-toggle" class="setting-toggle" />
             </ui:VisualElement>
         </ui:VisualElement>
