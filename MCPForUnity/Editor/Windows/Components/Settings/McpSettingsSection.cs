@@ -18,6 +18,7 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
         private Toggle debugLogsToggle;
         private Toggle stackTraceToggle;
         private Toggle logMcpRequestsResponsesToggle;
+        private Button resetSettingsButton;
 
         public VisualElement Root { get; private set; }
 
@@ -35,6 +36,7 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
             debugLogsToggle = Root.Q<Toggle>("debug-logs-toggle");
             stackTraceToggle = Root.Q<Toggle>("stack-trace-toggle");
             logMcpRequestsResponsesToggle = Root.Q<Toggle>("log-mcp-requests-responses-toggle");
+            resetSettingsButton = Root.Q<Button>("reset-settings-button");
         }
 
         private void InitializeUI()
@@ -82,6 +84,40 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
             {
                 McpLog.SetLogMcpRequestsAndResponsesEnabled(evt.newValue);
             });
+
+            if (resetSettingsButton != null)
+            {
+                resetSettingsButton.clicked += ResetSettings;
+            }
+        }
+
+        private void ResetSettings()
+        {
+            // Default values as defined in InitializeUI
+            const bool defaultDebugLogs = false;
+            const bool defaultStackTrace = true;
+            const bool defaultLogMcpRequestsResponses = false;
+
+            // Update UI toggles to reflect the new values
+            if (debugLogsToggle != null)
+            {
+                debugLogsToggle.value = defaultDebugLogs;
+            }
+
+            if (stackTraceToggle != null)
+            {
+                stackTraceToggle.value = defaultStackTrace;
+            }
+
+            if (logMcpRequestsResponsesToggle != null)
+            {
+                logMcpRequestsResponsesToggle.value = defaultLogMcpRequestsResponses;
+            }
+
+                        // Explicitly update McpLog state (this also updates EditorPrefs internally)
+            McpLog.SetDebugLoggingEnabled(defaultDebugLogs);
+            McpLog.SetStackTraceEnabled(defaultStackTrace);
+            McpLog.SetLogMcpRequestsAndResponsesEnabled(defaultLogMcpRequestsResponses);
         }
 
         private void UpdateVersionLabel()
