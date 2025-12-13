@@ -15,6 +15,10 @@
                 <ui:Label text="Show Debug-Level Logs:" class="setting-label" />
                 <ui:Toggle name="debug-logs-toggle" class="setting-toggle" />
             </ui:VisualElement>
+            <ui:VisualElement class="setting-row">
+                <ui:Label text="Log MCP Raw Requests/Responses:" class="setting-label" />
+                <ui:Toggle name="log-mcp-requests-responses-toggle" class="setting-toggle" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

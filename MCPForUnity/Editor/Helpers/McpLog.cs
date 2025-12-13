@@ -13,9 +13,11 @@ namespace MCPForUnity.Editor.Helpers
 
         private static volatile bool _debugEnabled = ReadDebugPreference();
         private static volatile bool _stackTraceEnabled = ReadStackTracePreference();
+        private static volatile bool _logMcpRequestsAndResponsesEnabled = ReadLogMcpRequestsAndResponsesPreference();
 
         private static bool IsDebugEnabled() => _debugEnabled;
         private static bool IsStackTraceEnabled() => _stackTraceEnabled;
+        public static bool IsLogMcpRequestsAndResponsesEnabled() => _logMcpRequestsAndResponsesEnabled;
 
         private static bool ReadDebugPreference()
         {
@@ -26,6 +28,12 @@ namespace MCPForUnity.Editor.Helpers
         private static bool ReadStackTracePreference()
         {
             try { return EditorPrefs.GetBool(EditorPrefKeys.LogStackTrace, false); }
+            catch { return false; }
+        }
+
+        private static bool ReadLogMcpRequestsAndResponsesPreference()
+        {
+            try { return EditorPrefs.GetBool(EditorPrefKeys.LogMcpRequestsAndResponses, false); }
             catch { return false; }
         }
 
@@ -40,6 +48,13 @@ namespace MCPForUnity.Editor.Helpers
         {
             _stackTraceEnabled = enabled;
             try { EditorPrefs.SetBool(EditorPrefKeys.LogStackTrace, enabled); }
+            catch { }
+        }
+
+        public static void SetLogMcpRequestsAndResponsesEnabled(bool enabled)
+        {
+            _logMcpRequestsAndResponsesEnabled = enabled;
+            try { EditorPrefs.SetBool(EditorPrefKeys.LogMcpRequestsAndResponses, enabled); }
             catch { }
         }
 

@@ -17,6 +17,7 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
         private Label versionLabel;
         private Toggle debugLogsToggle;
         private Toggle stackTraceToggle;
+        private Toggle logMcpRequestsResponsesToggle;
 
         public VisualElement Root { get; private set; }
 
@@ -33,6 +34,7 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
             versionLabel = Root.Q<Label>("version-label");
             debugLogsToggle = Root.Q<Toggle>("debug-logs-toggle");
             stackTraceToggle = Root.Q<Toggle>("stack-trace-toggle");
+            logMcpRequestsResponsesToggle = Root.Q<Toggle>("log-mcp-requests-responses-toggle");
         }
 
         private void InitializeUI()
@@ -55,6 +57,13 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
                 stackTraceToggle.value = stackTraceEnabled;
                 McpLog.SetStackTraceEnabled(stackTraceEnabled);
             }
+
+            if (logMcpRequestsResponsesToggle != null)
+            {
+                bool logMcpRequestsResponsesEnabled = EditorPrefs.GetBool(EditorPrefKeys.LogMcpRequestsAndResponses, false);
+                logMcpRequestsResponsesToggle.value = logMcpRequestsResponsesEnabled;
+                McpLog.SetLogMcpRequestsAndResponsesEnabled(logMcpRequestsResponsesEnabled);
+            }
         }
 
         private void RegisterCallbacks()
@@ -67,6 +76,11 @@ namespace MCPForUnity.Editor.Windows.Components.Settings
             stackTraceToggle.RegisterValueChangedCallback(evt =>
             {
                 McpLog.SetStackTraceEnabled(evt.newValue);
+            });
+
+            logMcpRequestsResponsesToggle.RegisterValueChangedCallback(evt =>
+            {
+                McpLog.SetLogMcpRequestsAndResponsesEnabled(evt.newValue);
             });
         }
 

@@ -68,6 +68,11 @@ namespace MCPForUnity.Editor.Services.Transport.Transports
             try { return EditorPrefs.GetBool(EditorPrefKeys.DebugLogs, false); } catch { return false; }
         }
 
+        private static bool IsLogMcpRequestsAndResponsesEnabled()
+        {
+            return McpLog.IsLogMcpRequestsAndResponsesEnabled();
+        }
+
         private static void LogBreadcrumb(string stage)
         {
             if (IsDebugEnabled())
@@ -563,6 +568,11 @@ namespace MCPForUnity.Editor.Services.Transport.Transports
                                     var preview = commandText.Length > 120 ? commandText.Substring(0, 120) + "…" : commandText;
                                     McpLog.Info($"recv framed: {preview}", always: false);
                                 }
+
+                                if (IsLogMcpRequestsAndResponsesEnabled())
+                                {
+                                    McpLog.Info($"[RawRequest]: {commandText}", always: true);
+                                }
                             }
                             catch { }
                             string commandId = Guid.NewGuid().ToString();
@@ -639,6 +649,10 @@ namespace MCPForUnity.Editor.Services.Transport.Transports
                             {
                                 await WriteFrameAsync(stream, responseBytes);
                                 swDirect.Stop();
+                                if (IsLogMcpRequestsAndResponsesEnabled())
+                                {
+                                    McpLog.Info($"[RawResponse]: {response}", always: true);
+                                }
                                 IoInfo($"[IO] ✓ write end   tag=response len={responseBytes.Length} reqId=? durMs={swDirect.Elapsed.TotalMilliseconds:F1}");
                             }
                             catch (Exception ex)
